@@ -1,16 +1,18 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
+	"github.com/graphql-go/graphql"
 )
 
 func main() {
-	successMessage := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Here shall be graphQLHTTP")
+	graphQLHTTP := func(w http.ResponseWriter, req *http.Request) {
+		query := executeQuery(r.URL.Query().Get("query"), schema)
+		json.NewEncoder(w).Encode(query)
 	}
-	http.HandleFunc("/", successMessage)
-	log.Println("Server connected")
+
+	http.HandleFunc("/", graphQLHTTP)
+	log.Println("Server running on localhost:3000")
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
