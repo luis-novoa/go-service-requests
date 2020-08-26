@@ -1,4 +1,4 @@
-package connection
+package database
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
   _ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-func establish() {
+func connect() {
 	const (
 		host = "localhost"
 		port = 5432

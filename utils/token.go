@@ -1,4 +1,4 @@
-package token
+package utils
 
 import (
 	"crypto/sha256"
@@ -6,7 +6,7 @@ import (
   "fmt"
 )
 
-func generate() string {
+func generateToken() string {
 	randomByte := make([]byte, 10)
 	rand.Read(randomByte)
 	return fmt.Sprintf("%x", sha256.Sum256(randomByte))
