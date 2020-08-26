@@ -18,26 +18,31 @@ func createTechnician(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	db.Create(&technician)
-	return technician, nil
+	return technician, technician.Error
 }
 
 func destroyTechnician(params graphql.ResolveParams) (string, error) {
 	id, _ := params.Args["id"].(int)
 	token, tokenOk := params.Args["token"].(string)
 
-	if tokenOk {
-		db := database.connect()
-		defer db.Close()
+	if !tokenOk {
+		return nil, fmt.Errorf("Please supply a token.")
+	}
 
-		var technician models.Technician
-		db.First(&technician, id)
-		if technician.auth_token == token {
-			db.Delete(&technician)
-			return fmt.Sprintf("%s was succesfully deleted from the database.", technician.Name), nil
-		} else {
-			return nil, "This token doesn't correspond to this technician. Verify if you're providing the right token or technician id." 
-		}
+	db := database.connect()
+	defer db.Close()
+
+	var technician models.Technician
+	db.First(&technician, id)
+
+	if technician.Error {
+		return nil, technician.Error
+	}
+
+	if technician.auth_token == token {
+		db.Delete(&technician)
+		return fmt.Sprintf("%s was succesfully deleted from the database.", technician.Name), nil
 	} else {
-		return nil, "Please supply a token."
+		return nil, fmt.Errorf("This token doesn't correspond to this technician. Verify if you're providing the right token or technician id.") 
 	}
 }

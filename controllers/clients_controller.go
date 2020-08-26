@@ -18,26 +18,31 @@ func createClient(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	db.Create(&client)
-	return client, nil
+	return client, client.Error
 }
 
 func destroyClient(params graphql.ResolveParams) (string, error) {
 	id, _ := params.Args["id"].(int)
 	token, tokenOk := params.Args["token"].(string)
 
-	if tokenOk {
-		db := database.connect()
-		defer db.Close()
+	if !tokenOk {
+		return nil, fmt.Errorf("Please supply a token.")
+	}
 
-		var client models.Client
-		db.First(&client, id)
-		if client.auth_token == token {
-			db.Delete(&client)
-			return fmt.Sprintf("%s was succesfully deleted from the database.", client.Name), nil
-		} else {
-			return nil, "This token doesn't correspond to this client. Verify if you're providing the right token or client id." 
-		}
+	db := database.connect()
+	defer db.Close()
+
+	var client models.Client
+	db.First(&client, id)
+
+	if client.Error {
+		return nil, client.Error
+	}
+
+	if client.auth_token == token {
+		db.Delete(&client)
+		return fmt.Sprintf("%s was succesfully deleted from the database.", client.Name), nil
 	} else {
-		return nil, "Please supply a token."
+		return nil, fmt.Errorf("This token doesn't correspond to this client. Verify if you're providing the right token or client id.") 
 	}
 }

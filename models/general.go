@@ -1,6 +1,9 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+  "time"
+  "github.com/jinzhu/gorm"
+)
 
 type General struct {
   ID        uint `gorm:"primary_key"`

@@ -4,10 +4,10 @@ import "github.com/jinzhu/gorm"
 
 type ServiceRequest struct {
 	General
-	Status string `gorm:"not null"`
+	Status string `gorm:"not null;DEFAULT:requested"`
 	Review int
-	UserID
+	UserID `gorm:"not null"`
 	User User
-	TechnicianID
+	TechnicianID `gorm:"not null"`
 	Technician Technician
 }
