@@ -10,7 +10,7 @@ queryType := graphql.NewObject(
 		Name: "Query",
 		Type: "Query",
 		Fields: graphql.Fields {
-			"service_request": &graphql.Field {
+			"serviceRequest": &graphql.Field {
 				Type: serviceRequestType,
 				Description: "Get service request by id",
 				Args: graphql.FieldConfigArgument {
@@ -19,7 +19,7 @@ queryType := graphql.NewObject(
 					"token": &graphql.ArgumentConfig { Type: graphql.String }
 				}
 			},
-			"service_requests": &graphql.Field {
+			"serviceRequests": &graphql.Field {
 				Type: graphql.NewList(serviceRequestType),
 				Description: "Get service request by id",
 				Args: graphql.FieldConfigArgument {

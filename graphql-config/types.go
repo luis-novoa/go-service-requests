@@ -43,11 +43,35 @@ serviceRequestType := graphql.NewObject(
 	}
 )
 
-destroyUserInputType := graphql.NewInputObject(
+userIDTokenInputType := graphql.NewInputObject(
 	graphql.InputObjectConfig {
-		Name: "DestroyUserInput",
+		Name: "UserIDTokenInput",
 		Fields: graphql.InputObjectConfigFieldMap {
 			"id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+		}
+	}
+)
+
+createServiceRequestInputType := graphql.NewInputObject(
+	graphql.InputObjectConfig {
+		Name: "createServiceRequestInput",
+		Fields: graphql.InputObjectConfigFieldMap {
+			"client_id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+		}
+	}
+)
+
+updateServiceRequestInputType := graphql.NewInputObject(
+	graphql.InputObjectConfig {
+		Name: "UpdateServiceRequestInput",
+		Fields: graphql.InputObjectConfigFieldMap {
+			"id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
+			"user_id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
+			"technician": &graphql.InputObjectFieldConfig { Type: graphql.Bool },
+			"solved_request": &graphql.InputObjectFieldConfig { Type: graphql.Bool },
+			"review": &graphql.InputObjectFieldConfig { Type: graphql.Int },
 			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
 		}
 	}

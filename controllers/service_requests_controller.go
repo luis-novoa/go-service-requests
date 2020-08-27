@@ -26,6 +26,10 @@ func createServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 		return nil, client.Error
 	}
 
+	if client.AuthToken != token {
+		return nil, fmt.Errorf("Incorrect token to access this request.")
+	}
+
 	var technicians []models.Technician
 	db.Find(&technicians)
 	chosenTechnician = utils.randomPick(technicians)

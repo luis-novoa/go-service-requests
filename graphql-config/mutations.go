@@ -50,6 +50,26 @@ mutationType := graphql.NewObject(
 				},
 				Resolve: controllers.destroyTechnician()
 			},
+			"createServiceRequest": &graphql.Field {
+				Type: graphql.String,
+				Description: "Create new service request",
+				Args: graphql.FieldConfigArgument {
+					"input": &graphql.ArgumentConfig {
+						Type: graphql.NewNonNull(createServiceRequestInputType)
+					}
+				},
+				Resolve: controllers.createServiceRequest()
+			},
+			"updateServiceRequest": &graphql.Field {
+				Type: graphql.String,
+				Description: "Update characteristics of existing service request",
+				Args: graphql.FieldConfigArgument {
+					"input": &graphql.ArgumentConfig {
+						Type: graphql.NewNonNull(updateServiceRequestInputType)
+					}
+				},
+				Resolve: controllers.updateServiceRequest()
+			}
 		}
 	}
 )
