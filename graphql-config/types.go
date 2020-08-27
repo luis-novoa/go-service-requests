@@ -30,7 +30,7 @@ technicianType := graphql.NewObject(
 
 serviceRequestType := graphql.NewObject(
 	graphql.ObjectConfig {
-		Name: "Service Request"
+		Name: "ServiceRequest"
 		Fields: graphql.Fields {
 			"id": &graphql.Field { Type: graphql.Int },
 			"status": &graphql.Field { Type: graphql.String },

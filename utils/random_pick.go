@@ -4,7 +4,7 @@ import (
     "fmt"
     "math/rand"
     "time"
-    "github.com/luis-novoa/models"
+    "github.com/luis-novoa/go-service-requests/models"
 )
 
 func randomPick(technicians []models.Technician) models.Technician {

@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/luis-novoa/utils"
-	"github.com/luis-novoa/models"
 	"github.com/graphql-go/graphql"
-	"github.com/luis-novoa/database"
+	"github.com/luis-novoa/go-service-requests/utils"
+	"github.com/luis-novoa/go-service-requests/models"
+	"github.com/luis-novoa/go-service-requests/database"
 )
 
 func createTechnician(params graphql.ResolveParams) (interface{}, error) {
