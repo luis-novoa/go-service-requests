@@ -66,3 +66,34 @@ func showServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 		return nil, fmt.Errorf("Incorrect token to access this request.")
 	}
 }
+
+func indexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
+	userID, userIDOk := params.Args["user_id"].(int)
+	technician, technicianOk := params.Args["technician"].(bool)
+	token, tokenOk := params.Args["token"].(string)
+
+	if !user_id || !technicianOk || !tokenOk {
+		return nil, fmt.Errorf("Missing user_id, token and/or technician fields. Provide all the information required to proceed.")
+	}
+
+	db := database.connect()
+	defer db.Close()
+
+	if technician {
+		var user models.Technician
+	} else {
+		var user models.Client
+	}
+	db.find(&user, userID)
+	if user.Error {
+		return nil, user.Error
+	}
+	
+	if user.AuthToken == token {
+		var serviceRequests []models.ServiceRequest
+		db.Model(&user).Association("ServiceRequests").Find(&serviceRequests)
+		return serviceRequests, nil
+	} else {
+		return nil, fmt.Errorf("Incorrect token to access this request.")
+	}
+}
