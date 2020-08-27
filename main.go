@@ -7,9 +7,15 @@ import (
 	"encoding/json"
 	"github.com/graphql-go/graphql"
 	"github.com/friendsofgo/graphiql"
+	"github.com/luis-novoa/go-service-requests/graphqlconfig"
 )
 
 func main() {
+	schema, _ := graphql.NewSchema(graphql.SchemaConfig {
+		Query: graphqlconfig.queryType,
+		Mutation: graphqlconfig.mutationType
+	})
+
 	graphQLHTTP := func(w http.ResponseWriter, r *http.Request) {
 		query := graphql.Do(graphql.Params{
 			Schema: schema,
