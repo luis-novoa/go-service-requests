@@ -42,3 +42,13 @@ serviceRequestType := graphql.NewObject(
 		}
 	}
 )
+
+destroyUserInputType := graphql.NewInputObject(
+	graphql.InputObjectConfig {
+		Name: "DestroyUserInput",
+		Fields: graphql.InputObjectConfigFieldMap {
+			"id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+		}
+	}
+)

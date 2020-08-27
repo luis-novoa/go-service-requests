@@ -5,9 +5,9 @@ import (
 	"github.com/luis-novoa/go-service-requests/controllers"
 )
 
-serviceRequestQueryType := graphql.NewObject(
+queryType := graphql.NewObject(
 	graphql.ObjectConfig {
-		Name: "ServiceRequestQuery",
+		Name: "Query",
 		Type: "Query",
 		Fields: graphql.Fields {
 			"service_request": &graphql.Field {
