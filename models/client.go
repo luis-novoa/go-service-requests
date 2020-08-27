@@ -1,10 +1,13 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"encoding/json"
+	"github.com/jinzhu/gorm"
+)
 
 type Client struct {
 	General
-	Name string `gorm:"size:75;unique;not null"`
-	AuthToken string `gorm:"size:64;unique;not null"`
+	Name string `gorm:"size:75;unique;not null" json:"name,omitempty"`
+	AuthToken string `gorm:"size:64;unique;not null" json:"auth_token,omitempty"`
 	ServiceRequests []ServiceRequest
 }
