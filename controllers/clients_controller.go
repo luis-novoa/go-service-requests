@@ -14,7 +14,7 @@ func createClient(params graphql.ResolveParams) (interface{}, error) {
 
 	client := models.Client{
 		Name: params.Args["name"].(string),
-		Auth_token: utils.generateToken()
+		AuthToken: utils.generateToken()
 	}
 
 	db.Create(&client)
@@ -39,7 +39,7 @@ func destroyClient(params graphql.ResolveParams) (string, error) {
 		return nil, client.Error
 	}
 
-	if client.auth_token == token {
+	if client.AuthToken == token {
 		db.Delete(&client)
 		return fmt.Sprintf("%s was succesfully deleted from the database.", client.Name), nil
 	} else {

@@ -14,7 +14,7 @@ func createTechnician(params graphql.ResolveParams) (interface{}, error) {
 
 	technician := models.Technician{
 		Name: params.Args["name"].(string),
-		Auth_token: utils.generateToken()
+		AuthToken: utils.generateToken()
 	}
 
 	db.Create(&technician)
@@ -39,7 +39,7 @@ func destroyTechnician(params graphql.ResolveParams) (string, error) {
 		return nil, technician.Error
 	}
 
-	if technician.auth_token == token {
+	if technician.AuthToken == token {
 		db.Delete(&technician)
 		return fmt.Sprintf("%s was succesfully deleted from the database.", technician.Name), nil
 	} else {
