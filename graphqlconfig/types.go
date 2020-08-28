@@ -15,18 +15,18 @@ clientType := graphql.NewObject(
 	}
 )
 
-technicianType := graphql.NewObject(
-	graphql.ObjectConfig {
-		Name: "Technician",
-		Fields: graphql.Fields {
-			"id": &graphql.Field { Type: graphql.Int },
-			"name": &graphql.Field { Type: graphql.String },
-			"auth_token": &graphql.Field { Type: graphql.String },
-			"created_at": &graphql.Field { Type: graphql.String },
-			"updated_at": &graphql.Field { Type: graphql.String }
-		}
-	}
-)
+// technicianType := graphql.NewObject(
+// 	graphql.ObjectConfig {
+// 		Name: "Technician",
+// 		Fields: graphql.Fields {
+// 			"id": &graphql.Field { Type: graphql.Int },
+// 			"name": &graphql.Field { Type: graphql.String },
+// 			"auth_token": &graphql.Field { Type: graphql.String },
+// 			"created_at": &graphql.Field { Type: graphql.String },
+// 			"updated_at": &graphql.Field { Type: graphql.String }
+// 		}
+// 	}
+// )
 
 serviceRequestType := graphql.NewObject(
 	graphql.ObjectConfig {
@@ -35,7 +35,7 @@ serviceRequestType := graphql.NewObject(
 			"id": &graphql.Field { Type: graphql.Int },
 			"status": &graphql.Field { Type: graphql.String },
 			"review": &graphql.Field { Type: graphql.Int },
-			"user_id": &graphql.Field { Type: graphql.Int },
+			"client_id": &graphql.Field { Type: graphql.Int },
 			"technician_id": &graphql.Field { Type: graphql.Int },
 			"created_at": &graphql.Field { Type: graphql.String },
 			"updated_at": &graphql.Field { Type: graphql.String }
@@ -43,22 +43,43 @@ serviceRequestType := graphql.NewObject(
 	}
 )
 
-userIDTokenInputType := graphql.NewInputObject(
+createUserInputType := graphql.NewInputObject(
 	graphql.InputObjectConfig {
-		Name: "UserIDTokenInput",
+		Name: "createUserInput",
 		Fields: graphql.InputObjectConfigFieldMap {
-			"id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
-			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+			"name": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.String) },
+			"technician": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Bool) }
 		}
 	}
 )
 
-createServiceRequestInputType := graphql.NewInputObject(
+destroyUserInputType := graphql.NewInputObject(
 	graphql.InputObjectConfig {
-		Name: "createServiceRequestInput",
+		Name: "destroyUserInput",
 		Fields: graphql.InputObjectConfigFieldMap {
-			"client_id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
-			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+			"id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.String) }
+		}
+	}
+)
+
+createAndIndexServiceRequestInputType := graphql.NewInputObject(
+	graphql.InputObjectConfig {
+		Name: "createAndIndexServiceRequestInput",
+		Fields: graphql.InputObjectConfigFieldMap {
+			"user_id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.String) }
+		}
+	}
+)
+
+showServiceRequestInputType := graphql.NewInputObject(
+	graphql.InputObjectConfig {
+		Name: "showServiceRequestInput",
+		Fields: graphql.InputObjectConfigFieldMap {
+			"id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
+			"user_id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.String) }
 		}
 	}
 )
@@ -67,12 +88,11 @@ updateServiceRequestInputType := graphql.NewInputObject(
 	graphql.InputObjectConfig {
 		Name: "UpdateServiceRequestInput",
 		Fields: graphql.InputObjectConfigFieldMap {
-			"id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
-			"user_id": &graphql.InputObjectFieldConfig { Type: graphql.Int },
-			"technician": &graphql.InputObjectFieldConfig { Type: graphql.Bool },
+			"id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
+			"user_id": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.Int) },
 			"solved_request": &graphql.InputObjectFieldConfig { Type: graphql.Bool },
 			"review": &graphql.InputObjectFieldConfig { Type: graphql.Int },
-			"token": &graphql.InputObjectFieldConfig { Type: graphql.String }
+			"token": &graphql.InputObjectFieldConfig { Type: graphql.NewNonNull(graphql.String) }
 		}
 	}
 )

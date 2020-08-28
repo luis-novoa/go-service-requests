@@ -14,18 +14,18 @@ queryType := graphql.NewObject(
 				Type: serviceRequestType,
 				Description: "Get service request by id",
 				Args: graphql.FieldConfigArgument {
-					"id": &graphql.ArgumentConfig { Type: graphql.Int },
-					"technician": &graphql.ArgumentConfig { Type: graphql.Bool },
-					"token": &graphql.ArgumentConfig { Type: graphql.String }
+					"input": &graphql.ArgumentConfig {
+						Type: graphql.NewNonNull(showServiceRequestInputType)
+					}
 				}
 			},
 			"serviceRequests": &graphql.Field {
 				Type: graphql.NewList(serviceRequestType),
 				Description: "Get service request by id",
 				Args: graphql.FieldConfigArgument {
-					"user_id": &graphql.ArgumentConfig { Type: graphql.Int },
-					"technician": &graphql.ArgumentConfig { Type: graphql.Bool },
-					"token": &graphql.ArgumentConfig { Type: graphql.String }
+					"input": &graphql.ArgumentConfig {
+						Type: graphql.NewNonNull(createAndIndexServiceRequestInputType)
+					}
 				}
 			}
 		}

@@ -10,55 +10,55 @@ mutationType := graphql.NewObject(
 		Name: "Mutation",
 		Type: "Mutation",
 		Fields: graphql.Fields {
-			"createClient": &graphql.Field {
+			"createUser": &graphql.Field {
 				Type: clientType,
-				Description: "Create new client",
+				Description: "Create new user",
 				Args: graphql.FieldConfigArgument {
-					"name": &graphql.ArgumentConfig {
-						Type: graphql.NewNonNull(graphql.String)
+					"input": &graphql.ArgumentConfig {
+						Type: graphql.NewNonNull(createUserInputType)
 					}
 				},
-				Resolve: controllers.createClient()
+				Resolve: controllers.CreateUser()
 			},
-			"destroyClient": &graphql.Field {
+			"destroyUser": &graphql.Field {
 				Type: graphql.String,
-				Description: "Create new client",
+				Description: "Destroy user by ID",
 				Args: graphql.FieldConfigArgument {
 					"input": &graphql.ArgumentConfig {
 						Type: graphql.NewNonNull(destroyUserInputType)
 					}
 				},
-				Resolve: controllers.destroyClient()
+				Resolve: controllers.DestroyUser()
 			},
-			"createTechnician": &graphql.Field {
-				Type: technicianType,
-				Description: "Create new technician",
-				Args: graphql.FieldConfigArgument {
-					"name": &graphql.ArgumentConfig {
-						Type: graphql.NewNonNull(graphql.String)
-					}
-				},
-				Resolve: controllers.createTechnician()
-			},
-			"destroyTechnician": &graphql.Field {
-				Type: graphql.String,
-				Description: "Create new technician",
-				Args: graphql.FieldConfigArgument {
-					"input": &graphql.ArgumentConfig {
-						Type: graphql.NewNonNull(destroyUserInputType)
-					}
-				},
-				Resolve: controllers.destroyTechnician()
-			},
+			// "createTechnician": &graphql.Field {
+			// 	Type: technicianType,
+			// 	Description: "Create new technician",
+			// 	Args: graphql.FieldConfigArgument {
+			// 		"name": &graphql.ArgumentConfig {
+			// 			Type: graphql.NewNonNull(graphql.String)
+			// 		}
+			// 	},
+			// 	Resolve: controllers.CreateTechnician()
+			// },
+			// "destroyTechnician": &graphql.Field {
+			// 	Type: graphql.String,
+			// 	Description: "Create new technician",
+			// 	Args: graphql.FieldConfigArgument {
+			// 		"input": &graphql.ArgumentConfig {
+			// 			Type: graphql.NewNonNull(destroyUserInputType)
+			// 		}
+			// 	},
+			// 	Resolve: controllers.DestroyTechnician()
+			// },
 			"createServiceRequest": &graphql.Field {
 				Type: graphql.String,
 				Description: "Create new service request",
 				Args: graphql.FieldConfigArgument {
 					"input": &graphql.ArgumentConfig {
-						Type: graphql.NewNonNull(createServiceRequestInputType)
+						Type: graphql.NewNonNull(createAndIndexServiceRequestInputType)
 					}
 				},
-				Resolve: controllers.createServiceRequest()
+				Resolve: controllers.CreateServiceRequest()
 			},
 			"updateServiceRequest": &graphql.Field {
 				Type: graphql.String,
@@ -68,7 +68,7 @@ mutationType := graphql.NewObject(
 						Type: graphql.NewNonNull(updateServiceRequestInputType)
 					}
 				},
-				Resolve: controllers.updateServiceRequest()
+				Resolve: controllers.UpdateServiceRequest()
 			}
 		}
 	}
