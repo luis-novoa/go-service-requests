@@ -10,7 +10,7 @@ var MutationType = graphql.NewObject(
 		Name: "Mutation",
 		Fields: graphql.Fields {
 			"createUser": &graphql.Field {
-				Type: clientType,
+				Type: userType,
 				Description: "Create new user",
 				Args: graphql.FieldConfigArgument {
 					"input": &graphql.ArgumentConfig {

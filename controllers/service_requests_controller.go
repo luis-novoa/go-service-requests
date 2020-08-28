@@ -11,8 +11,8 @@ import (
 )
 
 func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	userID, userIDOk := params.Args["user_id"].(int)
-	token, tokenOk := params.Args["token"].(string)
+	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	if !tokenOk || !userIDOk {
 		return nil, fmt.Errorf("Missing token and/or user_id.")
@@ -40,7 +40,7 @@ func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	db.Find(&technicians, models.User{ Technician: true })
 	chosenTechnician := randomPick(technicians)
 
-	serviceRequest := models.ServiceRequest{ ClientID: userID, TechnicianID: chosenTechnician.ID }
+	serviceRequest := models.ServiceRequest{ ClientID: userID, TechnicianID: chosenTechnician.ID, Status: "Requested" }
 	db.Create(&serviceRequest)
 	db.Model(&user).Association("ServiceRequests").Append(&serviceRequest)
 	db.Model(&chosenTechnician).Association("ServiceRequests").Append(&serviceRequest)
@@ -48,9 +48,9 @@ func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 }
 
 func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	id, idOk := params.Args["id"].(int)
-	userID, userIDOk := params.Args["user_id"].(int)
-	token, tokenOk := params.Args["token"].(string)
+	id, idOk := params.Args["input"].(map[string]interface{})["id"].(int)
+	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	if !idOk || !tokenOk || !userIDOk {
 		return nil, fmt.Errorf("Missing user_id, token and/or id fields. Provide all the information required to proceed.")
@@ -79,8 +79,8 @@ func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 }
 
 func IndexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
-	userID, userIDOk := params.Args["user_id"].(int)
-	token, tokenOk := params.Args["token"].(string)
+	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	if !userIDOk || !tokenOk {
 		return nil, fmt.Errorf("Missing user_id and/or token fields. Provide all the information required to proceed.")
@@ -103,11 +103,11 @@ func IndexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
 }
 
 func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	id, _ := params.Args["id"].(int)
-	userID, userIDOk := params.Args["user_id"].(int)
-	solvedRequest, solvedRequestOk := params.Args["solved_request"].(bool)
-	review, reviewOk := params.Args["review"].(int)
-	token, tokenOk := params.Args["token"].(string)
+	id, _ := params.Args["input"].(map[string]interface{})["id"].(int)
+	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	solvedRequest, solvedRequestOk := params.Args["input"].(map[string]interface{})["solved_request"].(bool)
+	review, reviewOk := params.Args["input"].(map[string]interface{})["review"].(int)
+	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	if !userIDOk || !tokenOk {
 		return nil, fmt.Errorf("Missing user_id, token and/or technician fields. Provide all the information required to proceed.")

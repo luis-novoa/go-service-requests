@@ -2,12 +2,13 @@ package graphqlconfig
 
 import "github.com/graphql-go/graphql"
 
-var clientType = graphql.NewObject(
+var userType = graphql.NewObject(
 	graphql.ObjectConfig {
-		Name: "Client",
+		Name: "User",
 		Fields: graphql.Fields {
 			"id": &graphql.Field { Type: graphql.Int },
 			"name": &graphql.Field { Type: graphql.String },
+			"technician": &graphql.Field { Type: graphql.Boolean },
 			"auth_token": &graphql.Field { Type: graphql.String },
 			"created_at": &graphql.Field { Type: graphql.String },
 			"updated_at": &graphql.Field { Type: graphql.String },

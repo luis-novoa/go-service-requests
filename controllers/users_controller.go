@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"github.com/graphql-go/graphql"
-	// "github.com/luis-novoa/go-service-requests/utils"
 	"github.com/luis-novoa/go-service-requests/models"
 	"github.com/luis-novoa/go-service-requests/database"
 )
@@ -15,18 +14,21 @@ func CreateUser(params graphql.ResolveParams) (interface{}, error) {
 	defer db.Close()
 
 	user := models.User {
-		Name: params.Args["name"].(string),
-		Technician: params.Args["technician"].(bool),
+		Name: params.Args["input"].(map[string]interface{})["name"].(string),
+		Technician: params.Args["input"].(map[string]interface{})["technician"].(bool),
 		AuthToken: generateToken(),
 	}
 
-	db.Create(&user)
+	errors := db.Save(&user).Error
+	if errors != nil {
+		return nil, errors
+	}
 	return user, nil
 }
 
 func DestroyUser(params graphql.ResolveParams) (interface{}, error) {
-	id, idOk := params.Args["id"].(int)
-	token, tokenOk := params.Args["token"].(string)
+	id, idOk := params.Args["input"].(map[string]interface{})["id"].(int)
+	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	if !tokenOk || !idOk {
 		return "", fmt.Errorf("Please supply a token and/or an id.")

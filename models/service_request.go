@@ -1,8 +1,12 @@
 package models
 
+import "time"
+
 type ServiceRequest struct {
-	General
-	Status string `gorm:"not null;DEFAULT:Requested" json:"status,omitempty"`
+	ID        int `gorm:"primary_key" json:"id,omitempty"`
+  CreatedAt time.Time `json:"created_at,omitempty"`
+  UpdatedAt time.Time `json:"updated_at,omitempty"`
+	Status string `gorm:"not null" json:"status,omitempty"`
 	Review int `json:"review,omitempty"`
 	ClientID int `gorm:"not null" json:"client_id,omitempty"`
 	Client User `gorm:"foreignKey:ClientID"`
