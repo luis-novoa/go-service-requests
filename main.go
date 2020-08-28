@@ -12,14 +12,14 @@ import (
 
 func main() {
 	schema, _ := graphql.NewSchema(graphql.SchemaConfig {
-		Query: graphqlconfig.queryType,
-		Mutation: graphqlconfig.mutationType
+		Query: graphqlconfig.QueryType,
+		Mutation: graphqlconfig.MutationType,
 	})
 
 	graphQLHTTP := func(w http.ResponseWriter, r *http.Request) {
 		query := graphql.Do(graphql.Params{
 			Schema: schema,
-			RequestString: r.URL.Query().Get("query")
+			RequestString: r.URL.Query().Get("query"),
 		})
 
 		if len(query.Errors) > 0 {

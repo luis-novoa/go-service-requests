@@ -5,7 +5,7 @@ import (
 	"time"
 	"math/rand"
 	"github.com/graphql-go/graphql"
-	"github.com/luis-novoa/go-service-requests/utils"
+	// "github.com/luis-novoa/go-service-requests/utils"
 	"github.com/luis-novoa/go-service-requests/models"
 	"github.com/luis-novoa/go-service-requests/database"
 )
@@ -42,6 +42,8 @@ func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 
 	serviceRequest := models.ServiceRequest{ ClientID: userID, TechnicianID: chosenTechnician.ID }
 	db.Create(&serviceRequest)
+	db.Model(&user).Association("ServiceRequests").Append(&serviceRequest)
+	db.Model(&chosenTechnician).Association("ServiceRequests").Append(&serviceRequest)
 	return serviceRequest, nil
 }
 
@@ -58,7 +60,7 @@ func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	defer db.Close()
 
 	var user models.User
-	errors := db.Preload("ServiceRequests").Find(&user, userID).Error
+	errors := db.Preload("ServiceRequests").First(&user, userID).Error
 	if errors != nil {
 		return nil, errors
 	}
@@ -68,7 +70,7 @@ func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	var serviceRequest models.ServiceRequest
-	errors := db.Model(&user).Association("ServiceRequests").Find(&serviceRequest, id).Error
+	errors = db.Model(&user.ServiceRequests).First(&serviceRequest, id).Error
 	if errors != nil {
 		return nil, errors
 	} else {
@@ -97,13 +99,7 @@ func IndexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
 		return nil, fmt.Errorf("Wrong token for this user.")
 	}
 	
-	var serviceRequests []models.ServiceRequest
-	errors := db.Model(&user).Association("ServiceRequests").Find(&serviceRequest).Error
-	if errors != nil {
-		return nil, errors
-	} else {
-		return serviceRequests, nil
-	}
+	return user.ServiceRequests, nil
 }
 
 func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
@@ -120,6 +116,9 @@ func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	if !solvedRequestOk && !reviewOk {
 		return nil, fmt.Errorf("Missing solved_request and review fields. Please provide information about one of them.")
 	}
+
+	db := database.Connect()
+	defer db.Close()
 
 	var user models.User
 	errors := db.Preload("ServiceRequests").Find(&user, userID).Error
@@ -144,13 +143,15 @@ func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	var serviceRequest models.ServiceRequest
-	errors := db.Model(&user).Association("ServiceRequests").Find(&serviceRequest, id).Error
-	if serviceRequest.Error {
-		return nil, serviceRequest.Error
+	errors = db.Model(&user.ServiceRequests).First(&serviceRequest, id).Error
+	if errors != nil {
+		return nil, errors
+	} else {
+		return serviceRequest, nil
 	}
 
 	var status string
-	if user.Technician {
+	if user.Technician && solvedRequest {
 		status = "Waiting for user's review"
 	} else {
 		if serviceRequest.Status == "Waiting for user's review" {

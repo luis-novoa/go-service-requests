@@ -24,7 +24,7 @@ func CreateUser(params graphql.ResolveParams) (interface{}, error) {
 	return user, nil
 }
 
-func DestroyUser(params graphql.ResolveParams) (string, error) {
+func DestroyUser(params graphql.ResolveParams) (interface{}, error) {
 	id, idOk := params.Args["id"].(int)
 	token, tokenOk := params.Args["token"].(string)
 
