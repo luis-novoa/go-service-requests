@@ -5,18 +5,13 @@ import (
 	"time"
 	"math/rand"
 	"github.com/graphql-go/graphql"
-	// "github.com/luis-novoa/go-service-requests/utils"
 	"github.com/luis-novoa/go-service-requests/models"
 	"github.com/luis-novoa/go-service-requests/database"
 )
 
 func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
-	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
-
-	if !tokenOk || !userIDOk {
-		return nil, fmt.Errorf("Missing token and/or user_id.")
-	}
+	userID := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	db := database.Connect()
 	defer db.Close()
@@ -42,25 +37,19 @@ func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 
 	serviceRequest := models.ServiceRequest{ ClientID: userID, TechnicianID: chosenTechnician.ID, Status: "Requested" }
 	db.Create(&serviceRequest)
-	db.Model(&user).Association("ServiceRequests").Append(&serviceRequest)
-	db.Model(&chosenTechnician).Association("ServiceRequests").Append(&serviceRequest)
 	return serviceRequest, nil
 }
 
 func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	id, idOk := params.Args["input"].(map[string]interface{})["id"].(int)
-	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
-	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
-
-	if !idOk || !tokenOk || !userIDOk {
-		return nil, fmt.Errorf("Missing user_id, token and/or id fields. Provide all the information required to proceed.")
-	}
+	id := params.Args["input"].(map[string]interface{})["id"].(int)
+	userID := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	db := database.Connect()
 	defer db.Close()
 
 	var user models.User
-	errors := db.Preload("ServiceRequests").First(&user, userID).Error
+	errors := db.First(&user, userID).Error
 	if errors != nil {
 		return nil, errors
 	}
@@ -70,7 +59,11 @@ func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	var serviceRequest models.ServiceRequest
-	errors = db.Model(&user.ServiceRequests).First(&serviceRequest, id).Error
+	if user.Technician {
+		errors = db.Where(&models.ServiceRequest{ TechnicianID: user.ID }).First(&serviceRequest, id).Error
+	} else {
+		errors = db.Where(&models.ServiceRequest{ ClientID: user.ID }).First(&serviceRequest, id).Error
+	}
 	if errors != nil {
 		return nil, errors
 	} else {
@@ -79,18 +72,14 @@ func ShowServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 }
 
 func IndexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
-	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
-	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
-
-	if !userIDOk || !tokenOk {
-		return nil, fmt.Errorf("Missing user_id and/or token fields. Provide all the information required to proceed.")
-	}
+	userID := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	token := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	db := database.Connect()
 	defer db.Close()
 
 	var user models.User
-	errors := db.Preload("ServiceRequests").Find(&user, userID).Error
+	errors := db.First(&user, userID).Error
 	if errors != nil {
 		return nil, errors
 	}
@@ -98,30 +87,38 @@ func IndexServiceRequests(params graphql.ResolveParams) (interface{}, error) {
 	if user.AuthToken != token {
 		return nil, fmt.Errorf("Wrong token for this user.")
 	}
+
+	var serviceRequests []models.ServiceRequest
+	if user.Technician {
+		errors = db.Where(&models.ServiceRequest{ TechnicianID: user.ID }).Find(&serviceRequests).Error
+	} else {
+		errors = db.Where(&models.ServiceRequest{ ClientID: user.ID }).Find(&serviceRequests).Error
+	}
 	
-	return user.ServiceRequests, nil
+	if errors != nil {
+		return nil, errors
+	} else {
+		return serviceRequests, nil
+	}
 }
 
 func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
-	id, _ := params.Args["input"].(map[string]interface{})["id"].(int)
-	userID, userIDOk := params.Args["input"].(map[string]interface{})["user_id"].(int)
+	id := params.Args["input"].(map[string]interface{})["id"].(int)
+	userID := params.Args["input"].(map[string]interface{})["user_id"].(int)
 	solvedRequest, solvedRequestOk := params.Args["input"].(map[string]interface{})["solved_request"].(bool)
 	review, reviewOk := params.Args["input"].(map[string]interface{})["review"].(int)
-	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
+	token := params.Args["input"].(map[string]interface{})["token"].(string)
 
-	if !userIDOk || !tokenOk {
-		return nil, fmt.Errorf("Missing user_id, token and/or technician fields. Provide all the information required to proceed.")
-	}
 
-	if !solvedRequestOk && !reviewOk {
-		return nil, fmt.Errorf("Missing solved_request and review fields. Please provide information about one of them.")
+	if solvedRequestOk && reviewOk {
+		return nil, fmt.Errorf("It is not allowed to change status and review at the same time.")
 	}
 
 	db := database.Connect()
 	defer db.Close()
 
 	var user models.User
-	errors := db.Preload("ServiceRequests").Find(&user, userID).Error
+	errors := db.First(&user, userID).Error
 	if errors != nil {
 		return nil, errors
 	}
@@ -143,11 +140,13 @@ func UpdateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	var serviceRequest models.ServiceRequest
-	errors = db.Model(&user.ServiceRequests).First(&serviceRequest, id).Error
+	if user.Technician {
+		errors = db.Where(&models.ServiceRequest{ TechnicianID: user.ID }).First(&serviceRequest, id).Error
+	} else {
+		errors = db.Where(&models.ServiceRequest{ ClientID: user.ID }).First(&serviceRequest, id).Error
+	}
 	if errors != nil {
 		return nil, errors
-	} else {
-		return serviceRequest, nil
 	}
 
 	var status string

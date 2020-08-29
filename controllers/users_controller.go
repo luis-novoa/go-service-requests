@@ -27,12 +27,8 @@ func CreateUser(params graphql.ResolveParams) (interface{}, error) {
 }
 
 func DestroyUser(params graphql.ResolveParams) (interface{}, error) {
-	id, idOk := params.Args["input"].(map[string]interface{})["id"].(int)
-	token, tokenOk := params.Args["input"].(map[string]interface{})["token"].(string)
-
-	if !tokenOk || !idOk {
-		return "", fmt.Errorf("Please supply a token and/or an id.")
-	}
+	id := params.Args["input"].(map[string]interface{})["id"].(int)
+	token := params.Args["input"].(map[string]interface{})["token"].(string)
 
 	db := database.Connect()
 	defer db.Close()
@@ -41,14 +37,14 @@ func DestroyUser(params graphql.ResolveParams) (interface{}, error) {
 	errors := db.First(&user, id).Error
 
 	if errors != nil {
-		return "", errors
+		return nil, errors
 	}
 
 	if user.AuthToken == token {
 		db.Delete(&user)
 		return fmt.Sprintf("%s was succesfully deleted from the database.", user.Name), nil
 	} else {
-		return "", fmt.Errorf("This token doesn't correspond to this user. Verify if you're providing the right token or user id.") 
+		return nil, fmt.Errorf("This token doesn't correspond to this user. Verify if you're providing the right token or user id.") 
 	}
 }
 

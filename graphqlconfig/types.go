@@ -16,19 +16,6 @@ var userType = graphql.NewObject(
 	},
 )
 
-// technicianType := graphql.NewObject(
-// 	graphql.ObjectConfig {
-// 		Name: "Technician",
-// 		Fields: graphql.Fields {
-// 			"id": &graphql.Field { Type: graphql.Int },
-// 			"name": &graphql.Field { Type: graphql.String },
-// 			"auth_token": &graphql.Field { Type: graphql.String },
-// 			"created_at": &graphql.Field { Type: graphql.String },
-// 			"updated_at": &graphql.Field { Type: graphql.String }
-// 		}
-// 	}
-// )
-
 var serviceRequestType = graphql.NewObject(
 	graphql.ObjectConfig {
 		Name: "ServiceRequest",

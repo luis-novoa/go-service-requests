@@ -29,28 +29,8 @@ var MutationType = graphql.NewObject(
 				},
 				Resolve: controllers.DestroyUser,
 			},
-			// "createTechnician": &graphql.Field {
-			// 	Type: technicianType,
-			// 	Description: "Create new technician",
-			// 	Args: graphql.FieldConfigArgument {
-			// 		"name": &graphql.ArgumentConfig {
-			// 			Type: graphql.NewNonNull(graphql.String)
-			// 		}
-			// 	},
-			// 	Resolve: controllers.CreateTechnician()
-			// },
-			// "destroyTechnician": &graphql.Field {
-			// 	Type: graphql.String,
-			// 	Description: "Create new technician",
-			// 	Args: graphql.FieldConfigArgument {
-			// 		"input": &graphql.ArgumentConfig {
-			// 			Type: graphql.NewNonNull(destroyUserInputType)
-			// 		}
-			// 	},
-			// 	Resolve: controllers.DestroyTechnician()
-			// },
 			"createServiceRequest": &graphql.Field {
-				Type: graphql.String,
+				Type: serviceRequestType,
 				Description: "Create new service request",
 				Args: graphql.FieldConfigArgument {
 					"input": &graphql.ArgumentConfig {
@@ -60,7 +40,7 @@ var MutationType = graphql.NewObject(
 				Resolve: controllers.CreateServiceRequest,
 			},
 			"updateServiceRequest": &graphql.Field {
-				Type: graphql.String,
+				Type: serviceRequestType,
 				Description: "Update characteristics of existing service request",
 				Args: graphql.FieldConfigArgument {
 					"input": &graphql.ArgumentConfig {
