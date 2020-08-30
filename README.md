@@ -59,23 +59,41 @@ git clone git@github.com:luis-novoa/go-service-requests.git
 
 ### Rutina Sugerida
 Para experimentar todas las posibilidades de esta API, se sugere la seguiente rutina:
+
 1 - Crear algunos clientes.
+
 2 - Crear algunos técnicos.
+
 3 - Intentar apagar un técnico o cliente con el token de otro técnico o cliente.
+
 4 - Apagar un técnico o cliente con el token correcto.
+
 5 - Intentar crear una requisición de servicio con el token de un técnico.
+
 6 - Crear varias requisiciones de servicio con el token de un cliente y verificar que los técnicos son asignados aleatoriamente.
+
 7 - Intentar ver los datos de una requisición con el token de un usuário que no és ni el técnico ni el cliente de esta requisición.
+
 8 - Ver los datos de una requisición con el token del cliente.
+
 9 - Ver los datos de una requisición con el token del técnico.
+
 10 - Ver todas las requisiciones asociadas a un usuário.
+
 11 - Intentar cambiar datos de una requisición con el token de un usuário que no és ni el técnico ni el cliente de esta requisición.
+
 12 - Intentar cambiar simultaneamente el status y la calificación de una requisición.
+
 13 - Con el token del técnico, intentar cambiar la calificación de la requisición.
+
 14 - Con el token del cliente, intentar cambiar el status de la requisición.
+
 15 - Con el token del cliente y una requisición con status "Requested", intentar cambiar su calificación.
+
 16 - Con el token del técnico, aprobar una requisición para que pueda recibir una calificación.
+
 17 - Con el token del cliente, intentar calificar la requisición con un valor mayor que 10.
+
 18 - Con el token del cliente, calificar la requisición con un valor entre 0 y 10.
 
 ## Autor
