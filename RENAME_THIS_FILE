@@ -1,0 +1,3 @@
+DB_ROLE="role"
+DB_PASSWORD="password"
+DB_NAME="database name"
