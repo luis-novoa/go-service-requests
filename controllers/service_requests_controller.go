@@ -28,7 +28,7 @@ func CreateServiceRequest(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	if user.AuthToken != token {
-		return nil, fmt.Errorf("Incorrect token to access this request.")
+		return nil, fmt.Errorf("Wrong token for this user.")
 	}
 
 	var technicians []models.User

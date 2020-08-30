@@ -44,7 +44,7 @@ func DestroyUser(params graphql.ResolveParams) (interface{}, error) {
 		db.Delete(&user)
 		return fmt.Sprintf("%s was succesfully deleted from the database.", user.Name), nil
 	} else {
-		return nil, fmt.Errorf("This token doesn't correspond to this user. Verify if you're providing the right token or user id.") 
+		return nil, fmt.Errorf("Wrong token for this user.") 
 	}
 }
 
