@@ -125,14 +125,14 @@ Crea un nuevo usuario.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 name | Nombre del usuario a ser creado
 technician | Boolean que identifica si el usuario es un técnico
 
 #### Parámetros Output
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID del usuario
 name | Nombre del usuario
@@ -202,7 +202,7 @@ Apaga un usuario.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID del usuario a ser apagado
 token | AuthToken del usuario a ser apagado
@@ -247,14 +247,14 @@ Crea una requisición de servicio.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 user_id | ID del usuario que hará la requisición
 token | AuthToken del usuario que hará la requisición
 
 #### Parámetros Output
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición
 status | Status de la requisición ("Requested", por ser nueva)
@@ -328,7 +328,7 @@ Cambia el status o la calificación de una requisición de servicio.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición a ser actualizada.
 user_id | ID del usuario que hará la actualización.
@@ -338,7 +338,7 @@ review | Solamente para clientes. Valora entre 0 y 10. El status de la requisici
 
 #### Parámetros Output
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición
 status | Status de la requisición ("Waiting for review", si un técnico la actualizó. "Solved", si un cliente la actualizó)
@@ -420,7 +420,7 @@ Busca informaciones a respeto de una requisición vinculada al User.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición
 user_id | ID del usuario
@@ -428,7 +428,7 @@ token | AuthToken del usuario
 
 #### Parámetros Output
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición
 status | Status de la requisición
@@ -505,14 +505,14 @@ Busca informaciones de todas las requisiciones vinculadas al User.
 
 #### Parámetros Input
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 user_id | ID del usuario
 token | AuthToken del usuario
 
 #### Parámetros Output
 
-Parâmetro | Descrição
+Parámetro | Descripción
 --------- | -----------
 id | ID de la requisición
 status | Status de la requisición
